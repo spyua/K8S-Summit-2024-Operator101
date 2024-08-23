@@ -1,0 +1,8 @@
+go 1.22
+
+use (
+	./02-CRD-GO-CLIENTSET/crd-sample
+	./03-OPERATOR/operator
+	./04-RECONCIER/reconcier
+	./05-DEPLOY-OPERATOR/deploy-operator
+)
