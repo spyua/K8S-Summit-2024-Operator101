@@ -78,3 +78,15 @@ RUN if [ "${INSTALL_KUBEBUILDER}" == "true" ]; then \
     fi
 
 
+
+# Install k8s code generator
+RUN go install k8s.io/code-generator/cmd/client-gen@v0.29.2     && \
+    go install k8s.io/code-generator/cmd/deepcopy-gen@v0.29.2   && \
+    go install k8s.io/code-generator/cmd/register-gen@v0.29.2
+
+
+# COPY 05-DEPLOY-OPERATOR/deploy-operator/go.mod /tmp/go.mod
+# RUN go get k8s.io/api@v0.29.2 && \
+    # k8s.io/apimachinery@v0.29.2 && \
+    # k8s.io/client-go@v0.29.2 && \
+    # sigs.k8s.io/controller-runtime@v0.17.6

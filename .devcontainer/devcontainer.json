@@ -17,20 +17,12 @@
 	},
 
 	"initializeCommand":{
-
-		"cp kubeconfig": "[ ! -z \"$(docker ps -f name=kind-control-plane -q)\" ] && docker exec kind-control-plane cat /etc/kubernetes/admin.conf > config",
-
-		"cp ca.crt": "[ ! -z \"$(docker ps -f name=kind-control-plane -q)\" ] && docker exec kind-control-plane cat /etc/kubernetes/pki/ca.crt > ca.crt",
-
-		"cp ca.key": "[ ! -z \"$(docker ps -f name=kind-control-plane -q)\" ] && docker exec kind-control-plane cat /etc/kubernetes/pki/ca.key > ca.key"
-
+		"cp kubeconfig": "[ ! -z \"$(docker ps -f name=kind-control-plane -q)\" ] && docker exec kind-control-plane cat /etc/kubernetes/admin.conf > config"
 	},
 
 
 	"postStartCommand": {
-		"mv kubeconfig": "mkdir -p /root/.kube && mv ${containerWorkspaceFolder}/config /root/.kube/config",
-		"mv ca.crt": "mv ${containerWorkspaceFolder}/ca.crt /root/ca.crt",
-		"mv ca.key": "mv ${containerWorkspaceFolder}/ca.key /root/ca.key"
+		"mv kubeconfig": "mkdir -p /root/.kube && mv ${containerWorkspaceFolder}/config /root/.kube/config"
 	},
 
 
