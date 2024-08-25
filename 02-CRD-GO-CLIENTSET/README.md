@@ -1,9 +1,6 @@
-# K8S-Summit-2024-Operator101
+# 生成 CR API
 
-## 建立CRD clientset
-
-
-### 建立目錄
+## 建立目錄
 
 ```bash
 export CRD_NAME=myweb
