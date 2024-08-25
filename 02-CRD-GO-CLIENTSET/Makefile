@@ -1,6 +1,6 @@
-CRD_NAME := myresource
-VERSION := v1alpha1
-BASE_PATH := crd-sample
+CRD_NAME := myweb
+VERSION := v1
+BASE_PATH := web-crd
 
 
 install-client-gen:
@@ -37,7 +37,7 @@ generate-register: install-register-gen
 	register-gen \
     -O zz_generated.register \
     --go-header-file ./hack/boilerplate.go.txt \
-	--input-dirs $(BASE_PATH)/pkg/apis/$(CRD_NAME)/$(VERSION) \
+	--input-dirs ${BASE_PATH}/pkg/apis/${CRD_NAME}/${VERSION} \
     --output-base ..
 
 

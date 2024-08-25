@@ -1,26 +1,43 @@
 # K8S-Summit-2024-Operator101
 
-## Create Folder Structure
+## 建立CRD clientset
+
+
+### 建立目錄
 
 ```bash
-mkdir crd-sample
-cd crd-sample
-go mod init crd-sample
+export CRD_NAME=myweb
+export GROUP=operator.k8s-summit.org
+export VERSION=v1
+export BASE_PATH=web-crd
+
+mkdir ${BASE_PATH}
+cd ${BASE_PATH}
+go mod init ${BASE_PATH}
 
 mkdir hack
 touch hack/boilerplate.go.txt
 
-mkdir -p pkg/apis/myresource/v1alpha1
+mkdir -p pkg/apis/${CRD_NAME}/${VERSION}
+
 ```
 
-## Create types.go
+### 建立types.go 與 doc.go
 
 ```bash
-vim pkg/apis/myresource/v1alpha1/types.go
-```
+# 建立 doc.go
 
-```go
-package v1alpha1
+cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/doc.go
+// +k8s:deepcopy-gen=package
+// +groupName=${GROUP}
+package ${VERSION}
+EOF
+
+
+# 建立 types.go
+
+cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/types.go
+package ${VERSION}
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,69 +45,135 @@ import (
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +genclient
-type MyResource struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+type MyWeb struct {
+	metav1.TypeMeta   \`json:",inline"\`
+	metav1.ObjectMeta \`json:"metadata,omitempty"\`
 
-	Spec   MyResourceSpec   `json:"spec"`
-	Status MyResourceStatus `json:"status"`
+	Spec   MyWebSpec   \`json:"spec"\`
+	Status MyWebStatus \`json:"status"\`
 }
 
-type MyResourceSpec struct {
-	Image string `json:"image"`
-	Key   string `json:"key"`
-	Value string `json:"value"`
+type MyWebSpec struct {
+	Image           string \`json:"image"\`
+	NodePortNumber  int    \`json:"nodePortNumber"\`
+	PageContentHtml string \`json:"pageContentHtml"\`
 }
 
-type MyResourceStatus struct {
-	Completed bool `json:"completed"`
+type MyWebStatus struct {
+	Completed bool \`json:"completed"\`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type MyResourceList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
+type MyWebList struct {
+	metav1.TypeMeta \`json:",inline"\`
+	metav1.ListMeta \`json:"metadata,omitempty"\`
 
-	Items []MyResource `json:"items"`
+	Items []MyWeb \`json:"items"\`
 }
-```
 
-## Create doc.go
+EOF
 
-```bash
-vim pkg/apis/mygroup.example.com/v1alpha1/doc.go
-```
-
-```go
-// +k8s:deepcopy-gen=package
-// +groupName=mygroup.example.com
-package v1alpha1
 ```
 
 
 ## Install code generators
-
 ```bash
-make install-generator
-```
 
+cat << EOF > go.mod
+module web-crd
 
-## Get Dependencies
+go 1.22
 
-```bash
+require (
+	k8s.io/apimachinery v0.29.2
+)
+EOF
+
 go mod tidy
+
+cp ../Makefile .
+make aut-generate
 ```
 
-## Auto Generate Code
+## 使用 clientset
 
 ```bash
-make auto-generate
-```
 
-## Build
+cat << EOF > main.go
+package main
 
-```bash
-go build main.go
+import (
+	"context"
+	"os"
+	"path"
+	"${BASE_PATH}/pkg/clientset"
+
+	webv1 "${BASE_PATH}/pkg/apis/${CRD_NAME}/${VERSION}"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/tools/clientcmd"
+)
+
+func main() {
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+
+	config, err := clientcmd.BuildConfigFromFlags("", path.Join(home, ".kube/config"))
+	if err != nil {
+		panic(err.Error())
+	}
+
+	clientset, err := clientset.NewForConfig(config)
+	if err != nil {
+		panic(err)
+	}
+
+	contentHtml := \`
+<html>
+	<body>
+		<h1>Hello, World!</h1>
+	</body>
+</html>\`
+
+	myresource := &webv1.MyWeb{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "myresource",
+		},
+		Spec: webv1.MyWebSpec{
+			Image:           "nginx",
+			NodePortNumber:  30100,
+			PageContentHtml: contentHtml,
+		},
+	}
+	clientset.OperatorV1().MyWebs("default").Create(context.Background(), myresource, metav1.CreateOptions{})
+
+	_, err = clientset.OperatorV1().MyWebs("default").Get(context.Background(), "myresource", metav1.GetOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+}
+EOF
+
+
+cat << EOF > go.mod
+module web-crd
+
+go 1.22
+
+require (
+	k8s.io/apimachinery v0.29.2
+	k8s.io/client-go v0.29.2
+)
+EOF
+
+go mod tidy
+
+go build
+
 ```
 
 

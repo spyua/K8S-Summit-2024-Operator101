@@ -1,7 +1,15 @@
-apiVersion: mygroup.example.com/v1alpha1
-kind: MyResource
+apiVersion: operator.k8s-summit.org/v1
+kind: MyWeb
 metadata:
-  name: myres1
+  name: myweb
   namespace: default
 spec:
   image: nginx
+  nodePortNumber: 30080
+  pageContentHtml: |
+    <html>
+      <body>
+        <h1>Hello, World!</h1>
+      </body>
+    </html>
+  
