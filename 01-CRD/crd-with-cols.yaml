@@ -26,9 +26,9 @@ spec:
             properties:
               image:
                 type: string
-              key:
-                type: string
-              value:
+              nodePortNumber:
+                type: integer                
+              page_html:
                 type: string
             required:
             - image
@@ -43,12 +43,9 @@ spec:
       - name: image
         jsonPath: .spec.image
         type: string
-      - name: key
-        jsonPath: .spec.key
-        type: string
-      - name: value
-        jsonPath: .spec.value
-        type: string
+      - name: NodePortNumber
+        type: integer
+        jsonPath: .spec.nodePortNumber
       - name: age
         jsonPath: .metadata.creationTimestamp
         type: date

@@ -5,3 +5,11 @@ metadata:
   namespace: default
 spec:
   image: nginx
+  nodePortNumber: 30080
+  page_html: |
+    <html>
+      <body>
+        <h1>Hello, World!</h1>
+      </body>
+    </html>
+  
