@@ -1,14 +1,16 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: web.operator.k8s-summit.org
+  name: mywebs.operator.k8s-summit.org
 spec:
   group: operator.k8s-summit.org
   scope: Namespaced
   names:
-    plural: webs
-    singular: web
-    kind: Web
+    plural: mywebs
+    singular: myweb
+    shortNames:
+    - web
+    kind: MyWeb
     categories:
     - all
   versions:
@@ -28,7 +30,7 @@ spec:
                 type: string
               nodePortNumber:
                 type: integer                
-              page_html:
+              pageContentHtml:
                 type: string
             required:
             - image
