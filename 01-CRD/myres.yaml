@@ -1,5 +1,5 @@
-apiVersion: mygroup.example.com/v1alpha1
-kind: MyResource
+apiVersion: operator.k8s-summit.org/v1
+kind: Web
 metadata:
   name: myres1
   namespace: default
