@@ -29,8 +29,9 @@ cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/doc.go
 // +groupName=${GROUP}
 package ${VERSION}
 EOF
+```
 
-
+```bash
 # 建立 types.go
 
 cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/types.go
@@ -69,11 +70,11 @@ type MyWebList struct {
 }
 
 EOF
-
 ```
 
 
 ## Install code generators
+
 ```bash
 go mod tidy
 
@@ -142,8 +143,9 @@ func main() {
 
 }
 EOF
+```
 
-
+```bash
 cat << EOF > go.mod
 module web-crd
 
@@ -154,11 +156,12 @@ require (
 	k8s.io/client-go v0.29.2
 )
 EOF
+```
 
+```bash
 go mod tidy
 
 go build
-
 ```
 
 
