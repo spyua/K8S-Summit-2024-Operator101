@@ -4,8 +4,8 @@ package fake
 
 import (
 	clientset "operator/pkg/clientset"
-	mygroupv1alpha1 "operator/pkg/clientset/typed/myresource/v1alpha1"
-	fakemygroupv1alpha1 "operator/pkg/clientset/typed/myresource/v1alpha1/fake"
+	operatorv1 "operator/pkg/clientset/typed/myweb/v1"
+	fakeoperatorv1 "operator/pkg/clientset/typed/myweb/v1/fake"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
@@ -64,7 +64,7 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// MygroupV1alpha1 retrieves the MygroupV1alpha1Client
-func (c *Clientset) MygroupV1alpha1() mygroupv1alpha1.MygroupV1alpha1Interface {
-	return &fakemygroupv1alpha1.FakeMygroupV1alpha1{Fake: &c.Fake}
+// OperatorV1 retrieves the OperatorV1Client
+func (c *Clientset) OperatorV1() operatorv1.OperatorV1Interface {
+	return &fakeoperatorv1.FakeOperatorV1{Fake: &c.Fake}
 }

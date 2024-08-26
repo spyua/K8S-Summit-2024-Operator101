@@ -3,9 +3,9 @@
 package clientset
 
 import (
-	mygroupv1alpha1 "operator/pkg/clientset/typed/myresource/v1alpha1"
 	"fmt"
 	"net/http"
+	operatorv1 "operator/pkg/clientset/typed/myweb/v1"
 
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
@@ -14,19 +14,18 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	MygroupV1alpha1() mygroupv1alpha1.MygroupV1alpha1Interface
+	OperatorV1() operatorv1.OperatorV1Interface
 }
 
-// Clientset contains the clients for groups. Each group has exactly one
-// version included in a Clientset.
+// Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	mygroupV1alpha1 *mygroupv1alpha1.MygroupV1alpha1Client
+	operatorV1 *operatorv1.OperatorV1Client
 }
 
-// MygroupV1alpha1 retrieves the MygroupV1alpha1Client
-func (c *Clientset) MygroupV1alpha1() mygroupv1alpha1.MygroupV1alpha1Interface {
-	return c.mygroupV1alpha1
+// OperatorV1 retrieves the OperatorV1Client
+func (c *Clientset) OperatorV1() operatorv1.OperatorV1Interface {
+	return c.operatorV1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -73,7 +72,7 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.mygroupV1alpha1, err = mygroupv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.operatorV1, err = operatorv1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +97,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.mygroupV1alpha1 = mygroupv1alpha1.New(c)
+	cs.operatorV1 = operatorv1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

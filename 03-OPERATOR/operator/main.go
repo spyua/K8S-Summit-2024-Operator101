@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	myresourcev1alpha1 "operator/pkg/apis/myresource/v1alpha1"
+	webv1 "operator/pkg/apis/myweb/v1"
 
-	batchv1 "k8s.io/api/batch/v1"
+	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -21,7 +21,7 @@ var scheme = runtime.NewScheme()
 func init() {
 	log.SetLogger(zap.New())
 	clientgoscheme.AddToScheme(scheme)
-	myresourcev1alpha1.AddToScheme(scheme)
+	webv1.AddToScheme(scheme)
 }
 
 func main() {
@@ -39,9 +39,10 @@ func main() {
 
 	err = builder.
 		ControllerManagedBy(mgr).
-		For(&myresourcev1alpha1.MyResource{}).
+		For(&webv1.MyWeb{}).
 		Owns(&corev1.ConfigMap{}).
-		Owns(&batchv1.Job{}).
+		Owns(&corev1.Service{}).
+		Owns(&appsv1.Deployment{}).
 		Complete(&MyReconciler{})
 
 	if err != nil {

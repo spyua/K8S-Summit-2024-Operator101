@@ -3,23 +3,23 @@
 package fake
 
 import (
-	v1alpha1 "operator/pkg/clientset/typed/myresource/v1alpha1"
+	v1 "operator/pkg/clientset/typed/myweb/v1"
 
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeMygroupV1alpha1 struct {
+type FakeOperatorV1 struct {
 	*testing.Fake
 }
 
-func (c *FakeMygroupV1alpha1) MyResources(namespace string) v1alpha1.MyResourceInterface {
-	return &FakeMyResources{c, namespace}
+func (c *FakeOperatorV1) MyWebs(namespace string) v1.MyWebInterface {
+	return &FakeMyWebs{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeMygroupV1alpha1) RESTClient() rest.Interface {
+func (c *FakeOperatorV1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }
