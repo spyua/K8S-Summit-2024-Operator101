@@ -3,17 +3,15 @@ FROM golang:1.22-alpine as builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
-COPY go.mod go.mod
-COPY go.sum go.sum
+COPY 03-OPERATOR/operator/go.mod go.mod
+COPY 03-OPERATOR/operator/go.sum go.sum
 RUN go mod download
 RUN go mod tidy
 
-COPY . .
-# COPY main.go main.go
-# COPY reconcier.go reconcier.go
+COPY 03-OPERATOR/operator .
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o operator main.go reconcier.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o operator main.go web_reconcier.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
