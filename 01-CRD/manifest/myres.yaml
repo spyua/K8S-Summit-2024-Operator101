@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   image: nginx
-  nodePortNumber: 30080
+  nodePortNumber: 30100
   pageContentHtml: |
     <html>
       <body>

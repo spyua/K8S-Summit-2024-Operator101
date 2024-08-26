@@ -43,7 +43,11 @@ func main() {
 		Owns(&corev1.ConfigMap{}).
 		Owns(&corev1.Service{}).
 		Owns(&appsv1.Deployment{}).
-		Complete(&MyReconciler{})
+		// Complete(&MyReconciler{})
+		Complete(&WebReconciler{
+			client: mgr.GetClient(),
+			scheme: mgr.GetScheme(),
+		})
 
 	if err != nil {
 		panic(err)
