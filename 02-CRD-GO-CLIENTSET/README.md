@@ -6,7 +6,7 @@
 export CRD_NAME=myweb
 export GROUP=operator.k8s-summit.org
 export VERSION=v1
-export BASE_PATH=web-crd
+export BASE_PATH=operator
 
 mkdir -p ${BASE_PATH}
 cd ${BASE_PATH}
