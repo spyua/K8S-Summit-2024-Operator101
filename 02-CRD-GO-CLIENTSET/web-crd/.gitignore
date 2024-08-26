@@ -1,4 +1,4 @@
-hack/*
-pkg/*
+hack/
+pkg/
 go.*
 *.go
