@@ -8,7 +8,7 @@ export GROUP=operator.k8s-summit.org
 export VERSION=v1
 export BASE_PATH=web-crd
 
-mkdir ${BASE_PATH}
+mkdir -p ${BASE_PATH}
 cd ${BASE_PATH}
 go mod init ${BASE_PATH}
 
@@ -75,20 +75,8 @@ EOF
 
 ## Install code generators
 ```bash
-
-cat << EOF > go.mod
-module web-crd
-
-go 1.22
-
-require (
-	k8s.io/apimachinery v0.29.2
-)
-EOF
-
 go mod tidy
 
-cp ../Makefile .
 make aut-generate
 ```
 
