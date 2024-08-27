@@ -86,6 +86,6 @@ RUN go install k8s.io/code-generator/cmd/client-gen@v0.29.2     && \
 
 
 # Install required dependencies from go.mod file
-COPY 05-DEPLOY-OPERATOR/ /tmp/05-DEPLOY-OPERATOR
-RUN cd /tmp/05-DEPLOY-OPERATOR/deploy-operator && \
+COPY 03-OPERATOR/ /tmp/03-OPERATOR
+RUN cd /tmp/03-OPERATOR/operator && \
     go get ./...

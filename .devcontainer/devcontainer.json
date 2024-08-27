@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/alpine
 {
 	"name": "k8s-summit-2024",
-	"image": "ogre0403/k8s-summit:latest",
+	"image": "k8s-summit:latest",
 
 	"customizations":{
 		"vscode": {
