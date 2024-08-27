@@ -16,7 +16,7 @@
 	},
 
 	"initializeCommand":{
-		"cp kubeconfig": "[ ! -z \"$(docker ps -f name=kind-control-plane -q)\" ] && docker exec kind-control-plane cat /etc/kubernetes/admin.conf > config"
+		"cp kubeconfig": "[ ! -z \"$(docker ps -f name=`kind  get clusters`-control-plane -q)\" ] && docker exec `kind  get clusters`-control-plane cat /etc/kubernetes/admin.conf > config"
 	},
 
 
