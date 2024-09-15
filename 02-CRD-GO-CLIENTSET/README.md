@@ -6,11 +6,10 @@
 export CRD_NAME=myweb
 export GROUP=operator.k8s-summit.org
 export VERSION=v1
-export BASE_PATH=operator
+export BASE_PATH=web-crd
 
-mkdir -p ${BASE_PATH}
-cd ${BASE_PATH}
-go mod init ${BASE_PATH}
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 
 mkdir hack
 touch hack/boilerplate.go.txt
@@ -22,6 +21,9 @@ mkdir -p pkg/apis/${CRD_NAME}/${VERSION}
 ### 建立types.go 與 doc.go
 
 ```bash
+
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 # 建立 doc.go
 
 cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/doc.go
@@ -32,6 +34,8 @@ EOF
 ```
 
 ```bash
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 # 建立 types.go
 
 cat << EOF > pkg/apis/${CRD_NAME}/${VERSION}/types.go
@@ -76,6 +80,8 @@ EOF
 ## Install code generators
 
 ```bash
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 go mod tidy
 
 make aut-generate
@@ -84,6 +90,7 @@ make aut-generate
 ## 使用 clientset
 
 ```bash
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
 
 cat << EOF > main.go
 package main
@@ -146,6 +153,8 @@ EOF
 ```
 
 ```bash
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 cat << EOF > go.mod
 module web-crd
 
@@ -159,6 +168,8 @@ EOF
 ```
 
 ```bash
+cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
+
 go mod tidy
 
 go build
