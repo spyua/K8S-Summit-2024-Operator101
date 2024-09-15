@@ -4,9 +4,6 @@ import (
 	"context"
 	webv1 "operator/pkg/apis/myweb/v1"
 
-	appsv1 "k8s.io/api/apps/v1"
-	corev1 "k8s.io/api/core/v1"
-
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
@@ -40,14 +37,7 @@ func main() {
 	err = builder.
 		ControllerManagedBy(mgr).
 		For(&webv1.MyWeb{}).
-		Owns(&corev1.ConfigMap{}).
-		Owns(&corev1.Service{}).
-		Owns(&appsv1.Deployment{}).
-		// Complete(&MyReconciler{})
-		Complete(&WebReconciler{
-			client: mgr.GetClient(),
-			scheme: mgr.GetScheme(),
-		})
+		Complete(&MyReconciler{})
 
 	if err != nil {
 		panic(err)

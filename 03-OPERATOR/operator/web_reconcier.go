@@ -9,6 +9,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -39,79 +40,79 @@ func (r *WebReconciler) Reconcile(ctx context.Context, req reconcile.Request) (r
 		return reconcile.Result{}, err
 	}
 
-	// foundCM := &corev1.ConfigMap{}
-	// err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundCM)
-	// if err != nil && errors.IsNotFound(err) {
-	// 	// Define a new deployment
-	// 	dep := r.newConfigMap(sample)
-	// 	log.Info("Creating a new ConfigMap", "ConfigMap.Namespace", dep.Namespace, "ConfigMap.Name", dep.Name)
-	// 	err = r.client.Create(ctx, dep)
-	// 	if err != nil {
-	// 		log.Error(err, "Failed to create new ConfigMap", "ConfigMap.Namespace", dep.Namespace, "ConfigMap.Name", dep.Name)
-	// 		return reconcile.Result{}, err
-	// 	}
-	// 	// Deployment created successfully - return and requeue
-	// 	return reconcile.Result{Requeue: true}, nil
-	// } else if err != nil {
-	// 	log.Error(err, "Failed to get ConfigMap")
-	// 	return reconcile.Result{}, err
-	// }
+	foundCM := &corev1.ConfigMap{}
+	err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundCM)
+	if err != nil && errors.IsNotFound(err) {
+		// Define a new deployment
+		dep := r.newConfigMap(sample)
+		log.Info("Creating a new ConfigMap", "ConfigMap.Namespace", dep.Namespace, "ConfigMap.Name", dep.Name)
+		err = r.client.Create(ctx, dep)
+		if err != nil {
+			log.Error(err, "Failed to create new ConfigMap", "ConfigMap.Namespace", dep.Namespace, "ConfigMap.Name", dep.Name)
+			return reconcile.Result{}, err
+		}
+		// Deployment created successfully - return and requeue
+		return reconcile.Result{Requeue: true}, nil
+	} else if err != nil {
+		log.Error(err, "Failed to get ConfigMap")
+		return reconcile.Result{}, err
+	}
 
-	// foundDeployment := &appsv1.Deployment{}
-	// err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundDeployment)
-	// if err != nil && errors.IsNotFound(err) {
-	// 	dep := r.newDeployment(sample)
-	// 	log.Info("Creating a new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
-	// 	err = r.client.Create(ctx, dep)
-	// 	if err != nil {
-	// 		log.Error(err, "Failed to create new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
-	// 		return reconcile.Result{}, err
-	// 	}
-	// 	return reconcile.Result{Requeue: true}, nil
-	// } else if err != nil {
-	// 	log.Error(err, "Failed to get Deployment")
-	// 	return reconcile.Result{}, err
-	// }
+	foundDeployment := &appsv1.Deployment{}
+	err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundDeployment)
+	if err != nil && errors.IsNotFound(err) {
+		dep := r.newDeployment(sample)
+		log.Info("Creating a new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+		err = r.client.Create(ctx, dep)
+		if err != nil {
+			log.Error(err, "Failed to create new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+			return reconcile.Result{}, err
+		}
+		return reconcile.Result{Requeue: true}, nil
+	} else if err != nil {
+		log.Error(err, "Failed to get Deployment")
+		return reconcile.Result{}, err
+	}
 
-	// foundSvc := &corev1.Service{}
-	// err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundSvc)
-	// if err != nil && errors.IsNotFound(err) {
-	// 	svc := r.newService(sample)
-	// 	log.Info("Creating a new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
-	// 	err = r.client.Create(ctx, svc)
-	// 	if err != nil {
-	// 		log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
-	// 		return reconcile.Result{}, err
-	// 	}
-	// 	return reconcile.Result{Requeue: true}, nil
-	// } else if err != nil {
-	// 	log.Error(err, "Failed to get Service")
-	// 	return reconcile.Result{}, err
-	// }
+	foundSvc := &corev1.Service{}
+	err = r.client.Get(ctx, types.NamespacedName{Name: sample.Name, Namespace: sample.Namespace}, foundSvc)
+	if err != nil && errors.IsNotFound(err) {
+		svc := r.newService(sample)
+		log.Info("Creating a new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+		err = r.client.Create(ctx, svc)
+		if err != nil {
+			log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+			return reconcile.Result{}, err
+		}
+		return reconcile.Result{Requeue: true}, nil
+	} else if err != nil {
+		log.Error(err, "Failed to get Service")
+		return reconcile.Result{}, err
+	}
 
 	// Update PageContentHtml and NodePortNumber
 
-	// html := sample.Spec.PageContentHtml
-	// if foundCM.Data["index.html"] != html {
-	// 	foundCM.Data["index.html"] = html
-	// 	err = r.client.Update(ctx, foundCM)
-	// 	if err != nil {
-	// 		log.Error(err, "Failed to update ConfigMap", "ConfigMap.Namespace", foundCM.Namespace, "ConfigMap.Name", foundCM.Name)
-	// 		return reconcile.Result{}, err
-	// 	}
-	// 	return reconcile.Result{Requeue: true}, nil
-	// }
+	html := sample.Spec.PageContentHtml
+	if foundCM.Data["index.html"] != html {
+		foundCM.Data["index.html"] = html
+		err = r.client.Update(ctx, foundCM)
+		if err != nil {
+			log.Error(err, "Failed to update ConfigMap", "ConfigMap.Namespace", foundCM.Namespace, "ConfigMap.Name", foundCM.Name)
+			return reconcile.Result{}, err
+		}
+		return reconcile.Result{Requeue: true}, nil
+	}
 
-	// nodePort := sample.Spec.NodePortNumber
-	// if foundSvc.Spec.Ports[0].NodePort != int32(nodePort) {
-	// 	foundSvc.Spec.Ports[0].NodePort = int32(nodePort)
-	// 	err = r.client.Update(ctx, foundSvc)
-	// 	if err != nil {
-	// 		log.Error(err, "Failed to update Service", "Service.Namespace", foundSvc.Namespace, "Service.Name", foundSvc.Name)
-	// 		return reconcile.Result{}, err
-	// 	}
-	// 	return reconcile.Result{Requeue: true}, nil
-	// }
+	nodePort := sample.Spec.NodePortNumber
+	if foundSvc.Spec.Ports[0].NodePort != int32(nodePort) {
+		foundSvc.Spec.Ports[0].NodePort = int32(nodePort)
+		err = r.client.Update(ctx, foundSvc)
+		if err != nil {
+			log.Error(err, "Failed to update Service", "Service.Namespace", foundSvc.Namespace, "Service.Name", foundSvc.Name)
+			return reconcile.Result{}, err
+		}
+		return reconcile.Result{Requeue: true}, nil
+	}
 
 	log.Info("Exiting Reconcile")
 
