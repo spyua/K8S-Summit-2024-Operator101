@@ -19,7 +19,7 @@ install-lister-gen:
 	go install k8s.io/code-generator/cmd/lister-gen@v0.29.2
 
 
-install-generator: install-client-gen install-deepcopy-gen install-register-gen
+install-generator: install-client-gen install-deepcopy-gen install-register-gen install-informer-gen install-lister-gen
 
 generate-deepcopy: install-deepcopy-gen
 	deepcopy-gen \
@@ -71,3 +71,8 @@ remove-generated:
 	rm -rf pkg/listers
 	rm -rf pkg/apis/$(CRD_NAME)/$(VERSION)/zz_generated.deepcopy.go
 	rm -rf pkg/apis/$(CRD_NAME)/$(VERSION)/zz_generated.register.go
+
+clean: remove-generated
+	rm -rf pkg/
+	rm -rf hack/
+	rm main.go
