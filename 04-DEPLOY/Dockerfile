@@ -11,7 +11,7 @@ RUN go mod tidy
 COPY 03-OPERATOR/operator .
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o operator main.go web_reconcier.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o operator main.go web_reconcier.go simple_reconcier.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
