@@ -82,7 +82,9 @@ RUN if [ "${INSTALL_KUBEBUILDER}" == "true" ]; then \
 # Install k8s code generator
 RUN go install k8s.io/code-generator/cmd/client-gen@v0.29.2     && \
     go install k8s.io/code-generator/cmd/deepcopy-gen@v0.29.2   && \
-    go install k8s.io/code-generator/cmd/register-gen@v0.29.2
+    go install k8s.io/code-generator/cmd/register-gen@v0.29.2   && \
+    go install k8s.io/code-generator/cmd/lister-gen@v0.29.2     && \
+    go install k8s.io/code-generator/cmd/informer-gen@v0.29.2
 
 
 # Install required dependencies from go.mod file

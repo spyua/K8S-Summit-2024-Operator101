@@ -84,7 +84,7 @@ cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
 
 go mod tidy
 
-make aut-generate
+make auto-generate
 ```
 
 ## 使用 clientset

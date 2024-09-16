@@ -12,6 +12,12 @@ install-deepcopy-gen:
 install-register-gen:
 	go install k8s.io/code-generator/cmd/register-gen@v0.29.2
 
+install-informer-gen:
+	go install k8s.io/code-generator/cmd/informer-gen@v0.29.2
+
+install-lister-gen:
+	go install k8s.io/code-generator/cmd/lister-gen@v0.29.2
+
 
 install-generator: install-client-gen install-deepcopy-gen install-register-gen
 
@@ -40,11 +46,28 @@ generate-register: install-register-gen
 	--input-dirs ${BASE_PATH}/pkg/apis/${CRD_NAME}/${VERSION} \
     --output-base ..
 
+generate-informer: install-informer-gen
+	informer-gen \
+	--input-dirs $(BASE_PATH)/pkg/apis/$(CRD_NAME)/$(VERSION) \
+	--versioned-clientset-package $(BASE_PATH)/pkg/clientset \
+	--listers-package $(BASE_PATH)/pkg/listers \
+	--output-package $(BASE_PATH)/pkg/informers \
+	--output-base .. \
+	--go-header-file ./hack/boilerplate.go.txt
 
-auto-generate: generate-deepcopy generate-register generate-clientset
+generate-lister: install-lister-gen
+	lister-gen \
+	--input-dirs $(BASE_PATH)/pkg/apis/$(CRD_NAME)/$(VERSION) \
+	--output-package $(BASE_PATH)/pkg/listers \
+	--output-base .. \
+	--go-header-file ./hack/boilerplate.go.txt
+
+auto-generate: generate-deepcopy generate-register generate-clientset generate-informer generate-lister
 
 
 remove-generated:
 	rm -rf pkg/clientset
+	rm -rf pkg/informers
+	rm -rf pkg/listers
 	rm -rf pkg/apis/$(CRD_NAME)/$(VERSION)/zz_generated.deepcopy.go
 	rm -rf pkg/apis/$(CRD_NAME)/$(VERSION)/zz_generated.register.go
